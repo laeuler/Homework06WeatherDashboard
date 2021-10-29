@@ -11,6 +11,7 @@ const getCurrentData = function (name, forecastData) {
     uvi: forecastData.current.uvi,
     date: getFormattedDate(forecastData.current.dt, "dddd DD.MM.YY HH:mm"),
     iconCode: forecastData.current.weather[0].icon,
+    //sunset: forecastData.current.sunset,
   };
 };
 
@@ -26,9 +27,10 @@ const getForecastData = function (forecastData) {
       wind: each.wind_speed,
       humidity: each.humidity,
       iconCode: each.weather[0].icon,
+      //sunset: each.current.sunset,
     };
   };
-
+  //forecast for next 5 days
   return forecastData.daily.slice(1, 6).map(callback);
 };
 
@@ -83,9 +85,9 @@ const setCitiesInLS = function (cityName) {
 };
 
 const renderCurrentWeatherCard = function (currentData) {
-  const currentWeatherCard = `<div class="card-body bg-light rounded mb-2">
+  const currentWeatherCard = `<div id="current" class="card-body rounded mb-2">
     <h2 class="card-title">
-        ${currentData.name} ${currentData.date}
+        ${currentData.name} -  ${currentData.date}
         <img src="https://openweathermap.org/img/w/${
           currentData.iconCode
         }.png" />
@@ -115,6 +117,7 @@ const renderForecastWeatherCards = function (forecastData) {
         <p class="card-text">Temp: ${each.temperature}&deg;C</p>
         <p class="card-text">Wind: ${each.wind} KPH</p>
         <p class="card-text">Humidity: ${each.humidity}%</p>
+        <p class="card-text">Sunset: ${each.sunset}</p>
         </div>
     </div>`;
   };

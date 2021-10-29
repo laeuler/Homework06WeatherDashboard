@@ -4,12 +4,22 @@
 
 .forecast-card {
   width: 18rem;
-  background-color: #649dd3;
+  background-color: #1269bb;
   color: #fff;
 }
 
 .list-group-item:hover {
-  background-color: crimson;
-  opacity: 0.8;
+  background-color: #1269bb;
+  opacity: 1;
+  color: white;
+}
+
+#current {
+  background-color: #1269bb;
+  color: white;
+}
+
+#search-button {
+  background-color: #1269bb;
   color: white;
 }
