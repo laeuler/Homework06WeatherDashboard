@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+.forecast-card {
+  width: 18rem;
+  background-color: #649dd3;
+  color: #fff;
+}
+
+.list-group-item:hover {
+  background-color: crimson;
+  opacity: 0.8;
+  color: white;
+}

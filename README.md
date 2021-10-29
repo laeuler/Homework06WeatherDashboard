@@ -1,4 +1,4 @@
-# Homework05WorkDayScheduler
+# Homework06WeatherDashboard
 
 Repo for week 6 assignment
 
