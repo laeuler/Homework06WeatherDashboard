@@ -14,7 +14,7 @@ const getCurrentData = function (name, forecastData) {
   };
 };
 
-const getFormattedDate = function (unixTimestamp, format = "DD/MM/YYYY") {
+const getFormattedDate = function (unixTimestamp, format = "dddd DD.MM.YY") {
   return moment.unix(unixTimestamp).format(format);
 };
 
@@ -41,7 +41,7 @@ const getWeatherData = async (cityName) => {
   const lon = currentData.coord.lon;
   const name = currentData.name;
 
-  const forecastDataUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`;
+  const forecastDataUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
   const forecastDataResponse = await fetch(forecastDataUrl);
   const forecastData = await forecastDataResponse.json();
@@ -89,8 +89,8 @@ const renderCurrentWeatherCard = function (currentData) {
           currentData.iconCode
         }.png" />
     </h2>
-    <p class="card-text">Temp: ${currentData.temperature}&deg;F</p>
-    <p class="card-text">Wind: ${currentData.wind} MPH</p>
+    <p class="card-text">Temp: ${currentData.temperature}&deg;C</p>
+    <p class="card-text">Wind: ${currentData.wind} KPH</p>
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
         UV index: <span class="btn ${getUVIClassName(currentData.uvi)}">${
@@ -111,9 +111,9 @@ const renderForecastWeatherCards = function (forecastData) {
         <p class="card-text">
             <img src="https://openweathermap.org/img/w/${each.iconCode}.png" />
         </p>
-        <p class="card-text">Temp: ${each.temperature}&deg;F</p>
-        <p class="card-text">Wind: ${each.wind} MPH</p>
-        <p class="card-text">Humidity: ${each.humidity}</p>
+        <p class="card-text">Temp: ${each.temperature}&deg;C</p>
+        <p class="card-text">Wind: ${each.wind} KPH</p>
+        <p class="card-text">Humidity: ${each.humidity}%</p>
         </div>
     </div>`;
   };
@@ -123,7 +123,7 @@ const renderForecastWeatherCards = function (forecastData) {
   const forecastCardsContainer = `<div class="bg-light rounded">
     <h3 class="p-3 text-center">5-Day Forecast:</h3>
     <div
-        class="m-3 d-flex flex-wrap justify-content-around"
+        class="m-3 d-flex flex-wrap justify-content-left"
         id=""
     >${forecastCards}</div>
     </div>`;
