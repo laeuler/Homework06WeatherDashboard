@@ -194,9 +194,26 @@ const handleSearch = async function (event) {
     setCitiesInLS(cityName);
     //add newest Entry to recent Cities list after submit
     renderRecentCities();
+
+    //clear entry field
+    $("#city-input").val("");
   }
 };
 
+// =========================== Clear Recent Cities ===========================
+$("#clear").click(clearLocal);
+
+function clearLocal() {
+  var proceed = confirm(
+    "Do you want to delete all the recent weather forecasts?"
+  );
+  if (proceed === true) {
+    localStorage.clear();
+    handleReady();
+  } else {
+    alert("Everything still there :-)");
+  }
+}
 // =========================== Event Handler ===========================
 const handleReady = function () {
   // render recent cities
