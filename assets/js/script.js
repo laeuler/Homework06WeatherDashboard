@@ -64,7 +64,7 @@ const getUVIClassName = function (uvi) {
   } else if (uvi >= 6 && uvi < 8) {
     return "bg-danger";
   } else {
-    return "bg-dark";
+    return "bg-dark text-white";
   }
 };
 
@@ -141,11 +141,13 @@ const renderWeatherCards = function (weatherData) {
 const renderRecentCities = function () {
   // get cities from LS
   const cities = JSON.parse(localStorage.getItem("recentCities")) ?? [];
+  console.log(cities);
 
   const citiesContainer = $("#city-list");
-
+  // delete everything inside container before rebuild
   citiesContainer.empty();
 
+  // per City a list item is Created with the name of the city
   const constructAndAppendCity = function (city) {
     const liEl = `<li data-city=${city} class="list-group-item">${city}</li>`;
     citiesContainer.append(liEl);
@@ -157,7 +159,10 @@ const renderRecentCities = function () {
     // if click is from li only
     if (target.is("li")) {
       // get city name
-      const cityName = target.data("city");
+      //const cityName = target.data("city"); line responsible to fetch the name for calling API
+      //runs into trouble with City Names with more than one word, like New York, San Francisco
+      //old code only fetches the San and New
+      const cityName = target.text();
 
       // render weather info with city name
       renderWeatherInfo(cityName);
@@ -183,14 +188,16 @@ const handleSearch = async function (event) {
   const cityName = $("#city-input").val();
 
   if (cityName) {
+    //pull weather forecast for city name
     renderWeatherInfo(cityName);
 
     setCitiesInLS(cityName);
-
+    //add newest Entry to recent Cities list after submit
     renderRecentCities();
   }
 };
 
+// =========================== Event Handler ===========================
 const handleReady = function () {
   // render recent cities
   renderRecentCities();
@@ -205,5 +212,10 @@ const handleReady = function () {
   }
 };
 
+// =========================== Event Handler ===========================
+// When Search Button is clicked
 $("#search-form").on("submit", handleSearch);
+// When page gets loaded
 $(document).ready(handleReady);
+
+//localStorage.clear();
