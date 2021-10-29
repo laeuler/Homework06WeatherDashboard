@@ -55,15 +55,16 @@ const getWeatherData = async (cityName) => {
   };
 };
 
+//This function determines the background for the UVI level
 const getUVIClassName = function (uvi) {
   if (uvi >= 0 && uvi < 3) {
-    return "btn-success";
+    return "bg-success";
   } else if (uvi >= 3 && uvi < 6) {
-    return "btn-warning";
+    return "bg-warning";
   } else if (uvi >= 6 && uvi < 8) {
-    return "btn-danger";
+    return "bg-danger";
   } else {
-    return "btn-dark";
+    return "bg-dark";
   }
 };
 
@@ -93,9 +94,9 @@ const renderCurrentWeatherCard = function (currentData) {
     <p class="card-text">Wind: ${currentData.wind} KPH</p>
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
-        UV index: <span class="btn ${getUVIClassName(currentData.uvi)}">${
-    currentData.uvi
-  }</span>
+        UV index: <span class="p-2 rounded ${getUVIClassName(
+          currentData.uvi
+        )}">${currentData.uvi}</span>
     </p>
     </div>`;
 
