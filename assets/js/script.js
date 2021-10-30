@@ -137,8 +137,8 @@ const renderCurrentWeatherCard = function (currentData) {
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
     UV index: <span class="p-2 rounded ${getUVIClassName(currentData.uvi)}">${
-      currentData.uvi
-    }</span>
+    currentData.uvi
+  }</span>
     </p>
       <p class="card-text">${nextSun}</p>
     </div>`;
