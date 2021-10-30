@@ -13,6 +13,7 @@ Thanks a lot for the initial work that helps us to focus on the Project 1 Phase.
 
 - [GitHub Repository](https://github.com/laeuler/Homework06WeatherDashboard)
 - [GitHub Page](https://laeuler.github.io/Homework06WeatherDashboard)
+- [API Documentation](https://openweathermap.org/api/one-call-api)
 
 # Adjustments made & Mockup
 
