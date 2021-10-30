@@ -1,8 +1,11 @@
+// =========================== API Call, Dates and Visual Color Coding for UVI ===========================
 const weatherCardsContainer = $("#weather-cards-container");
 
+// API key needed to call open weather API
 const API_KEY = "393609ac7b2e5f25ccdd00e626ee13dd";
 
 const getCurrentData = function (name, forecastData) {
+  var currentTime = moment();
   return {
     name: name,
     temperature: forecastData.current.temp,
@@ -11,10 +14,18 @@ const getCurrentData = function (name, forecastData) {
     uvi: forecastData.current.uvi,
     date: getFormattedDate(forecastData.current.dt, "dddd DD.MM.YY HH:mm"),
     iconCode: forecastData.current.weather[0].icon,
-    //sunset: forecastData.current.sunset,
+    localTime: getFormattedDate(
+      forecastData.current.dt + forecastData.timezone_offset - 7200,
+      "HH:mm"
+    ),
+    //sunset: getFormattedDate(forecastData.current.sunset, "HH:mm"),
+    //sunset: getFormattedDate(forecastData.current.sunset, "HH:mm"),
+    //offset: forecastData.timezone_offset,
+    feelsLike: forecastData.current.feels_like,
   };
 };
 
+// Get Date for current forcast in preferred format
 const getFormattedDate = function (unixTimestamp, format = "dddd DD.MM.YY") {
   return moment.unix(unixTimestamp).format(format);
 };
@@ -27,10 +38,9 @@ const getForecastData = function (forecastData) {
       wind: each.wind_speed,
       humidity: each.humidity,
       iconCode: each.weather[0].icon,
-      //sunset: each.current.sunset,
     };
   };
-  //forecast for next 5 days
+  //forecast for next 5 days = slice from 1 to 6
   return forecastData.daily.slice(1, 6).map(callback);
 };
 
@@ -50,6 +60,8 @@ const getWeatherData = async (cityName) => {
 
   const current = getCurrentData(name, forecastData);
   const forecast = getForecastData(forecastData);
+  console.log(current);
+  console.log(forecast);
 
   return {
     current: current,
@@ -57,7 +69,7 @@ const getWeatherData = async (cityName) => {
   };
 };
 
-//This function determines the background for the UVI level
+// =========================== UVI Index Color Coding ===========================
 const getUVIClassName = function (uvi) {
   if (uvi >= 0 && uvi < 3) {
     return "bg-success";
@@ -70,8 +82,9 @@ const getUVIClassName = function (uvi) {
   }
 };
 
+// =========================== Manage Local Storage List of previous cities ===========================
 const setCitiesInLS = function (cityName) {
-  // get cities from LS
+  // get cities from LS and convert to JS OBject
   const cities = JSON.parse(localStorage.getItem("recentCities")) ?? [];
 
   // if city does not exist
@@ -81,18 +94,23 @@ const setCitiesInLS = function (cityName) {
 
     // set cities in LS
     localStorage.setItem("recentCities", JSON.stringify(cities));
+    console.log("recentCities");
   }
 };
 
+// =========================== Build up Current Weather Forecast Cards ===========================
+
+// Card is being build
 const renderCurrentWeatherCard = function (currentData) {
   const currentWeatherCard = `<div id="current" class="card-body rounded mb-2">
     <h2 class="card-title">
-        ${currentData.name} -  ${currentData.date}
+        ${currentData.name} - ${currentData.localTime}
         <img src="https://openweathermap.org/img/w/${
           currentData.iconCode
         }.png" />
     </h2>
     <p class="card-text">Temp: ${currentData.temperature}&deg;C</p>
+    <p class="card-text">Feels like: ${currentData.feelsLike}&deg;C</p>
     <p class="card-text">Wind: ${currentData.wind} KPH</p>
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
@@ -102,10 +120,13 @@ const renderCurrentWeatherCard = function (currentData) {
     </p>
     </div>`;
 
+  // Card is appended to Container for the forecast (next to the left side bar with history)
   weatherCardsContainer.append(currentWeatherCard);
 };
 
-// constructing forecast cards
+// =========================== Build up 5-day Weather Forecast Cards ===========================
+
+// Build 5 Cards
 const renderForecastWeatherCards = function (forecastData) {
   const constructForecastCard = function (each) {
     return `<div class="card m-1 forecast-card">
@@ -117,21 +138,23 @@ const renderForecastWeatherCards = function (forecastData) {
         <p class="card-text">Temp: ${each.temperature}&deg;C</p>
         <p class="card-text">Wind: ${each.wind} KPH</p>
         <p class="card-text">Humidity: ${each.humidity}%</p>
-        <p class="card-text">Sunset: ${each.sunset}</p>
         </div>
     </div>`;
   };
 
+  // Array of objects is converted to one string
   const forecastCards = forecastData.map(constructForecastCard).join("");
 
+  // String is embedded in Container for the 5 Cards (layout set here)
   const forecastCardsContainer = `<div class="bg-light rounded">
-    <h3 class="p-3 text-center">5-Day Forecast:</h3>
+    <h3 class="p-3 text-center">Forecast for the next 5 days:</h3>
     <div
         class="m-3 d-flex flex-wrap justify-content-left"
         id=""
     >${forecastCards}</div>
     </div>`;
 
+  //Container around 5 cards is appended to Container for current and 5 days forecast
   weatherCardsContainer.append(forecastCardsContainer);
 };
 
@@ -141,10 +164,11 @@ const renderWeatherCards = function (weatherData) {
   renderForecastWeatherCards(weatherData.forecast);
 };
 
+// =========================== tbd ===========================
 const renderRecentCities = function () {
   // get cities from LS
   const cities = JSON.parse(localStorage.getItem("recentCities")) ?? [];
-  console.log(cities);
+  //console.log(cities);
 
   const citiesContainer = $("#city-list");
   // delete everything inside container before rebuild
@@ -198,7 +222,7 @@ const handleSearch = async function (event) {
     //add newest Entry to recent Cities list after submit
     renderRecentCities();
 
-    //clear entry field
+    //clear entry field after search button is clicked
     $("#city-input").val("");
   }
 };
@@ -237,5 +261,3 @@ const handleReady = function () {
 $("#search-form").on("submit", handleSearch);
 // When page gets loaded
 $(document).ready(handleReady);
-
-//localStorage.clear();
