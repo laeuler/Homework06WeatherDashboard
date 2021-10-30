@@ -63,8 +63,8 @@ const getWeatherData = async (cityName) => {
 
   const current = getCurrentData(name, forecastData);
   const forecast = getForecastData(forecastData);
-  console.log(current);
-  console.log(forecast);
+  // console.log(current);
+  // console.log(forecast);
 
   return {
     current: current,
@@ -105,21 +105,24 @@ const setCitiesInLS = function (cityName) {
 
 // Card is being build
 const renderCurrentWeatherCard = function (currentData) {
-  // adjust background in dependency of sunrise, sunset and local Time
-  // console.log("Sunrise: " + currentData.sunrise);
-  // console.log("Sunset: " + currentData.sunset);
-  // console.log("local Time: " + currentData.localT);
+  console.log(currentData.localT - currentData.localRise);
+  console.log(currentData.localT - currentData.localSet);
+  console.log("Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm"));
+  console.log("Sunset: " + getFormattedDate(currentData.localSet, "HH:mm"));
+  console.log("local Time: " + getFormattedDate(currentData.localT, "HH:mm"));
 
   var backgroundClass = "";
   var nextSun = "";
+  var deltaRise = currentData.localT - currentData.localRise;
+  var deltaSet = currentData.localT - currentData.localSet;
 
-  if (
-    currentData.localT <= currentData.sunset &&
-    currentData.localT >= currentData.sunrise
-  ) {
+  if (deltaRise >= 0 && deltaSet <= 0) {
     backgroundClass = "day";
     nextSun = "Sunset: " + getFormattedDate(currentData.localSet, "HH:mm");
-  } else {
+  } else if (deltaRise >= 0 && deltaSet >= 0) {
+    backgroundClass = "night";
+    nextSun = "Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm");
+  } else if (deltaRise <= 0 && deltaSet <= 0) {
     backgroundClass = "night";
     nextSun = "Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm");
   }
