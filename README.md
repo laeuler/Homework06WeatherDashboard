@@ -6,6 +6,8 @@ This is the repository to hand in the homework from week 6
 
 - This week homework submission builds on the work from Suraj Verma
 - [Copied Repo](https://github.com/surajverma2587/weather-dashboard/tree/dev)
+- [Picture used for Daytime background](https://unsplash.com/photos/sAtNmpS66n4), thanks to Janaine Arioli for the picture
+- [Picture used for Nighttime background](https://unsplash.com/photos/vhInzGLpnyI), thanks to Noah Silliman for the picture
 
 Thanks a lot for the initial work that helps us to focus on the Project 1 Phase.
 
