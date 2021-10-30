@@ -1,7 +1,5 @@
 # Homework06WeatherDashboard
 
-Repo for week 6 assignment
-
 This is the repository to hand in the homework from week 6
 
 # Acknowledgements
@@ -14,7 +12,7 @@ Thanks a lot for the initial work that helps us to focus on the Project 1 Phase.
 # Links to the files
 
 - [GitHub Repository](https://github.com/laeuler/Homework06WeatherDashboard)
-- [GitHub Page](https://laeuler.github.io/Homework06WeatherDashbaord)
+- [GitHub Page](https://laeuler.github.io/Homework06WeatherDashboard)
 
 # Adjustments made & Mockup
 
