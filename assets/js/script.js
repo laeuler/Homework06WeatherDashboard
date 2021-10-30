@@ -5,7 +5,6 @@ const weatherCardsContainer = $("#weather-cards-container");
 const API_KEY = "393609ac7b2e5f25ccdd00e626ee13dd";
 
 const getCurrentData = function (name, forecastData) {
-  var currentTime = moment();
   return {
     name: name,
     temperature: forecastData.current.temp,
@@ -18,10 +17,14 @@ const getCurrentData = function (name, forecastData) {
       forecastData.current.dt + forecastData.timezone_offset - 7200,
       "HH:mm"
     ),
-    //sunset: getFormattedDate(forecastData.current.sunset, "HH:mm"),
-    //sunset: getFormattedDate(forecastData.current.sunset, "HH:mm"),
-    //offset: forecastData.timezone_offset,
     feelsLike: forecastData.current.feels_like,
+    //needed for background function
+    sunrise: forecastData.current.sunrise,
+    sunset: forecastData.current.sunset,
+    localT: forecastData.current.dt + forecastData.timezone_offset - 7200,
+    localRise:
+      forecastData.current.sunrise + forecastData.timezone_offset - 7200,
+    localSet: forecastData.current.sunset + forecastData.timezone_offset - 7200,
   };
 };
 
@@ -102,7 +105,26 @@ const setCitiesInLS = function (cityName) {
 
 // Card is being build
 const renderCurrentWeatherCard = function (currentData) {
-  const currentWeatherCard = `<div id="current" class="card-body rounded mb-2">
+  // adjust background in dependency of sunrise, sunset and local Time
+  // console.log("Sunrise: " + currentData.sunrise);
+  // console.log("Sunset: " + currentData.sunset);
+  // console.log("local Time: " + currentData.localT);
+
+  var backgroundClass = "";
+  var nextSun = "";
+
+  if (
+    currentData.localT <= currentData.sunset &&
+    currentData.localT >= currentData.sunrise
+  ) {
+    backgroundClass = "day";
+    nextSun = "Sunset: " + getFormattedDate(currentData.localSet, "HH:mm");
+  } else {
+    backgroundClass = "night";
+    nextSun = "Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm");
+  }
+
+  const currentWeatherCard = `<div id="current" class="card-body rounded mb-2 ${backgroundClass}">
     <h2 class="card-title">
         ${currentData.name} - ${currentData.localTime}
         <img src="https://openweathermap.org/img/w/${
@@ -114,15 +136,17 @@ const renderCurrentWeatherCard = function (currentData) {
     <p class="card-text">Wind: ${currentData.wind} KPH</p>
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
-        UV index: <span class="p-2 rounded ${getUVIClassName(
-          currentData.uvi
-        )}">${currentData.uvi}</span>
-    </p>
+    UV index: <span class="p-2 rounded ${getUVIClassName(currentData.uvi)}">${
+    currentData.uvi
+  }</span>
+      </p>
+      <p class="card-text">${nextSun}</p>
     </div>`;
 
   // Card is appended to Container for the forecast (next to the left side bar with history)
   weatherCardsContainer.append(currentWeatherCard);
 };
+// backgroundCurrent();
 
 // =========================== Build up 5-day Weather Forecast Cards ===========================
 

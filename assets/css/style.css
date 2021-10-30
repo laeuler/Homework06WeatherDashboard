@@ -4,7 +4,7 @@
 
 .forecast-card {
   width: 18rem;
-  background-color: #1269bb;
+  background-color: #396792;
   opacity: 0.8;
   color: #fff;
 }
@@ -24,4 +24,14 @@
 #search-button {
   background-color: #1269bb;
   color: white;
+}
+
+.night {
+  background-image: url("../images/night.jpg");
+  background-position: center;
+}
+
+.day {
+  background-image: url("../images/day.jpg");
+  background-position: top;
 }
