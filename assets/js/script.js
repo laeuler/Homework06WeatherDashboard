@@ -11,7 +11,7 @@ const getCurrentData = function (name, forecastData) {
     wind: forecastData.current.wind_speed,
     humidity: forecastData.current.humidity,
     uvi: forecastData.current.uvi,
-    date: getFormattedDate(forecastData.current.dt, "dddd DD.MM.YY HH:mm"),
+    date: getFormattedDate(forecastData.current.dt, "dddd, DD.MM"),
     iconCode: forecastData.current.weather[0].icon,
     localTime: getFormattedDate(
       forecastData.current.dt + forecastData.timezone_offset - 7200,
@@ -126,7 +126,7 @@ const renderCurrentWeatherCard = function (currentData) {
 
   const currentWeatherCard = `<div id="current" class="card-body rounded mb-2 ${backgroundClass}">
     <h2 class="card-title">
-        ${currentData.name} - ${currentData.localTime}
+        ${currentData.name} - ${currentData.localTime} (${currentData.date})
         <img src="https://openweathermap.org/img/w/${
           currentData.iconCode
         }.png" />
@@ -137,9 +137,9 @@ const renderCurrentWeatherCard = function (currentData) {
     <p class="card-text">Humidity: ${currentData.humidity}%</p>
     <p class="card-text">
     UV index: <span class="p-2 rounded ${getUVIClassName(currentData.uvi)}">${
-    currentData.uvi
-  }</span>
-      </p>
+      currentData.uvi
+    }</span>
+    </p>
       <p class="card-text">${nextSun}</p>
     </div>`;
 
