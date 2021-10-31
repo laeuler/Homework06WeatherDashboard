@@ -55,7 +55,7 @@ Situation: I wanted to display in the current forecast card the local time of th
 ### Version 3: making it smarter
 
 - At first I went for the hardcoding of the correction path, because the API didn't offer me such an factor
-- then I realized the factor is nothign more than UTC offset for my very own local time (or the one from the user)
+- then I realized the factor is nothing more than UTC offset for my very own local time (or the one from the user)
 - and tada, I remembered there is a function through moment.js (utcOffset)
 - Side mark: it is Sunday, 9am - this will become relevant later
 
@@ -66,7 +66,7 @@ Situation: I wanted to display in the current forecast card the local time of th
 - I double checked dozen of times the order of my arguments
   - am I substracting in the right order
   - should I work with absolutes
-  - is this the case for negative absolutes ("No it works for new York")
+  - is this the case for negative absolutes ("No it works for New York")
 - I went on a console.log spree (example below for Honolulu to replicate it)
 
 ![General UI](./assets/screencapture/localTimeConfusion.png)
@@ -75,13 +75,13 @@ Situation: I wanted to display in the current forecast card the local time of th
   - it is 9:30 in Berlin
   - Offset for me is 1h
   - Offset for SF is 7h
-  - sum of offsetd is 8h
+  - sum of offset is 8h
   - so the calculation of 9:30-8h is...2:30 ("What?!)
-- I wasn't sure who to trust anymore, how could math be so misleading, how does this happen and grabbed a coffee
-- during the coffee I said to myself: "I will get the timezone name (accessible through the API), lets see if that leads to something
+- I wasn't sure who to trust anymore, how could math be so misleading, how does this happen and went for a coffee
+- during the coffee I decided on my last move with regards to this: "I will get the timezone name (accessible through the API), lets see if that leads to something"
 - entering the desk at 10:02 am, coded the console.log for the timezone and...it worked
 
-So this was the moment it hit me! End of summer time ends at 2am in the morning and it was reflected everywhere beside...yeah beside the cities in timezones earlier than 2am
+So this was the moment it hit me! End of summer time ends at 2am in the morning and it was reflected everywhere beside...yeah beside the cities in timezones earlier than 2am, or on every city on the west coast. 
 
 Key Learning and best practice to my future self: Don't, never ever, work with timezone cacluation around the end of summer or winter time. Just don't do it :-)
 
