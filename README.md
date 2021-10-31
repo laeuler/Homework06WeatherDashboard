@@ -32,11 +32,58 @@ There've been several adjustments made in comparison to the original code
   - UV index color coding is now using a class not associated with button behavior
   - felt temperature was added
   - depending on the local time of the city it determined wether it is daytime or night time and the background of the card is adjusted accordingly + either next Sunrise or Sunset time is displayed as well
-  - local times are calculated through the timezone offset from the API plus 2h (Berlin time), did not find an option so far to make the 2h dependent on the location of the user. 1h offset for London time is expected therefore
+  - local times are calculated through the timezone offset from the API UTC offset of the user
 - forecast cards for the next 5 days are aligned to the left
 - JavaScript code is now commented
 
 ![General UI](./assets/screencapture/GeneralUI.png)
+
+# Calculating local Times - a funny learning experience
+
+Situation: I wanted to display in the current forecast card the local time of the city searched, not the local time of the user.
+
+### Version 1: the basic idea
+
+- I fetched the timezone offset from the open weather API
+- deducting the current offset and correcting it with a hardcoded factor (in my case 7200 for Berlin)
+
+### Version 2: the insight & adjustments
+
+- this morning I woke up and realized Summer Time ended
+- so I knew I had to adjust the hardcoded factor to 3600, my initial plan
+
+### Version 3: making it smarter
+
+- At first I went for the hardcoding of the correction path, because the API didn't offer me such an factor
+- then I realized the factor is nothign more than UTC offset for my very own local time (or the one from the user)
+- and tada, I remembered there is a function through moment.js (utcOffset)
+- Side mark: it is Sunday, 9am - this will become relevant later
+
+### Version 4: strange things happen
+
+- I implemented the variable local offset through moment.js and it worked for all cities - almost
+- When I searched for San Francisco, or Seattle it strangely didn't add up
+- I double checked dozen of times the order of my arguments
+  - am I substracting in the right order
+  - should I work with absolutes
+  - is this the case for negative absolutes ("No it works for new York")
+- I went on a console.log spree (example below for Honolulu to replicate it)
+
+![General UI](./assets/screencapture/localTimeConfusion.png)
+
+- my head broke
+  - it is 9:30 in Berlin
+  - Offset for me is 1h
+  - Offset for SF is 7h
+  - sum of offsetd is 8h
+  - so the calculation of 9:30-8h is...2:30 ("What?!)
+- I wasn't sure who to trust anymore, how could math be so misleading, how does this happen and grabbed a coffee
+- during the coffee I said to myself: "I will get the timezone name (accessible through the API), lets see if that leads to something
+- entering the desk at 10:02 am, coded the console.log for the timezone and...it worked
+
+So this was the moment it hit me! End of summer time ends at 2am in the morning and it was reflected everywhere beside...yeah beside the cities in timezones earlier than 2am
+
+Key Learning and best practice to my future self: Don't, never ever, work with timezone cacluation around the end of summer or winter time. Just don't do it :-)
 
 # Closing Remarks
 

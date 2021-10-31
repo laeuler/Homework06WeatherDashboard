@@ -5,26 +5,37 @@ const weatherCardsContainer = $("#weather-cards-container");
 const API_KEY = "393609ac7b2e5f25ccdd00e626ee13dd";
 
 const getCurrentData = function (name, forecastData) {
+  const d = moment();
+  var localOffset = 60 * d.utcOffset();
   return {
-    name: name,
-    temperature: forecastData.current.temp,
-    wind: forecastData.current.wind_speed,
-    humidity: forecastData.current.humidity,
-    uvi: forecastData.current.uvi,
-    date: getFormattedDate(forecastData.current.dt, "dddd, DD.MM"),
-    iconCode: forecastData.current.weather[0].icon,
+    name: name, //name of the city
+    temperature: forecastData.current.temp, //current temp in the city
+    wind: forecastData.current.wind_speed, //current wind speed of the city
+    humidity: forecastData.current.humidity, //current humidity of the city
+    uvi: forecastData.current.uvi, //current UVI index
+    feelsLike: forecastData.current.feels_like, //felt like temperature in the city
+
+    date: getFormattedDate(forecastData.current.dt, "dddd, DD.MM"), //date displayed as name of the day and short day and month
+    date2: forecastData.current.dt, //simple unformatted date
+    iconCode: forecastData.current.weather[0].icon, //icon code used
+    offset: forecastData.timezone_offset, //offset of the timezone from the city (from UTC)
+    localoff: localOffset, //offset from the user (from UTC)
+    alloffset: forecastData.timezone_offset - localOffset, //sum of offsets to determine local
     localTime: getFormattedDate(
-      forecastData.current.dt + forecastData.timezone_offset - 7200,
+      forecastData.current.dt + forecastData.timezone_offset - localOffset,
       "HH:mm"
-    ),
-    feelsLike: forecastData.current.feels_like,
+    ), //calculate local time based on offsets
+    timezone: forecastData.timezone, //get timezone name of the city
+
     //needed for background function
-    sunrise: forecastData.current.sunrise,
-    sunset: forecastData.current.sunset,
-    localT: forecastData.current.dt + forecastData.timezone_offset - 7200,
+    sunrise: forecastData.current.sunrise, //sunrise at local time user
+    sunset: forecastData.current.sunset, //sunset at local time user
+    localT:
+      forecastData.current.dt + forecastData.timezone_offset - localOffset, //local time in the City
     localRise:
-      forecastData.current.sunrise + forecastData.timezone_offset - 7200,
-    localSet: forecastData.current.sunset + forecastData.timezone_offset - 7200,
+      forecastData.current.sunrise + forecastData.timezone_offset - localOffset, //local sunrise in the city
+    localSet:
+      forecastData.current.sunset + forecastData.timezone_offset - localOffset, //local sunset in the city
   };
 };
 
@@ -63,8 +74,6 @@ const getWeatherData = async (cityName) => {
 
   const current = getCurrentData(name, forecastData);
   const forecast = getForecastData(forecastData);
-  // console.log(current);
-  // console.log(forecast);
 
   return {
     current: current,
@@ -105,11 +114,28 @@ const setCitiesInLS = function (cityName) {
 
 // Card is being build
 const renderCurrentWeatherCard = function (currentData) {
-  console.log(currentData.localT - currentData.localRise);
-  console.log(currentData.localT - currentData.localSet);
-  console.log("Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm"));
-  console.log("Sunset: " + getFormattedDate(currentData.localSet, "HH:mm"));
-  console.log("local Time: " + getFormattedDate(currentData.localT, "HH:mm"));
+
+  //=========================== Experiment with local time calculation ===========================
+  // console.log(currentData.localT - currentData.localRise);
+  // console.log(currentData.localT - currentData.localSet);
+  // console.log("Sunrise: " + getFormattedDate(currentData.localRise, "HH:mm"));
+  // console.log("Sunset: " + getFormattedDate(currentData.localSet, "HH:mm"));
+
+  console.log("Step 1: current Time: " + currentData.date2);
+  console.log(
+    "Step 1a: Show time in normal format " +
+      getFormattedDate(currentData.date2, "HH:mm")
+  );
+  console.log("Step 2: calculate sum of offset: " + currentData.alloffset);
+  console.log(
+    "Step 2a: sum of offset in hours: " + currentData.alloffset / 3600
+  );
+  var newTime = currentData.date2 + currentData.alloffset;
+  console.log("Step 3: current Time - sum of offset: " + newTime);
+  console.log("Step 4: format new time: " + getFormattedDate(newTime, "HH:mm"));
+  console.log("Timezone: " + currentData.timezone)
+
+  //=========================== End ===========================
 
   var backgroundClass = "";
   var nextSun = "";
@@ -288,3 +314,5 @@ const handleReady = function () {
 $("#search-form").on("submit", handleSearch);
 // When page gets loaded
 $(document).ready(handleReady);
+
+// =========================== Time Zone Experimenting ===========================
