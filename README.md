@@ -1,6 +1,6 @@
-# Homework06WeatherDashboard
+# Weather-Forecast-App
 
-This is the repository to hand in the homework from week 6
+Weather App to fetch a 5-day forecast and current weather data including sunrise/sunset for a searched city.
 
 # Acknowledgements
 
@@ -100,3 +100,7 @@ Thank you very much for that.
 Looking forward to the feedback
 
 Lars
+
+# License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
