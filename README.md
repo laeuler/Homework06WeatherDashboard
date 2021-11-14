@@ -17,6 +17,12 @@ Thanks a lot for the initial work that helps us to focus on the Project 1 Phase.
 - [GitHub Page](https://laeuler.github.io/Homework06WeatherDashboard)
 - [API Documentation](https://openweathermap.org/api/one-call-api)
 
+# Technolgies used
+
+- HTML
+- CSS, Bootstrap
+- JavaScript, jQuery
+
 # Adjustments made & Mockup
 
 There've been several adjustments made in comparison to the original code
@@ -81,7 +87,7 @@ Situation: I wanted to display in the current forecast card the local time of th
 - during the coffee I decided on my last move with regards to this: "I will get the timezone name (accessible through the API), lets see if that leads to something"
 - entering the desk at 10:02 am, coded the console.log for the timezone and...it worked
 
-So this was the moment it hit me! End of summer time ends at 2am in the morning and it was reflected everywhere beside...yeah beside the cities in timezones earlier than 2am, or on every city on the west coast. 
+So this was the moment it hit me! End of summer time ends at 2am in the morning and it was reflected everywhere beside...yeah beside the cities in timezones earlier than 2am, or on every city on the west coast.
 
 Key Learning and best practice to my future self: Don't, never ever, work with timezone cacluation around the end of summer or winter time. Just don't do it :-)
 
