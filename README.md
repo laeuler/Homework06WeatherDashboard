@@ -23,6 +23,9 @@ Thanks a lot for the initial work that helps us to focus on the Project 1 Phase.
 - CSS, Bootstrap
 - JavaScript, jQuery
 
+# Contributors
+- Lars Euler: https://github.com/laeuler
+
 # Adjustments made & Mockup
 
 There've been several adjustments made in comparison to the original code
